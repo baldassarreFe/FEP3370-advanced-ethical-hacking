@@ -1,0 +1,9 @@
+network:
+  version: 2
+  ethernets:
+    {{ external_interface }}:
+      dhcp4: yes
+    {{ intnet_interface }}:
+      dhcp4: no
+      addresses :
+        - {{ intnet_address }}/{{ intnet_prefix }}

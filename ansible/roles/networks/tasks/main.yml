@@ -1,0 +1,9 @@
+- name: Update netplan config
+  template:
+    dest: /etc/netplan/00-installer-config.yaml
+    src: 00-installer-config.yaml.j2
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - netplan apply

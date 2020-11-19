@@ -1,0 +1,4 @@
+external_interface: etho0
+intnet_interface: eth1
+intnet_address: 192.168.0.1
+intnet_prefix: 24
