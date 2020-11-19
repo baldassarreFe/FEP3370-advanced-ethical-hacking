@@ -1,0 +1,8 @@
+authoritative;
+
+default-lease-time {{ dhcp_default_lease_time }};
+max-lease-time 7200;
+
+subnet {{ dhcp_subnet }} netmask {{ dhcp_netmask }} {
+  range {{ dhcp_range_start }} {{ dhcp_range_end }};
+}

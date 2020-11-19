@@ -1,0 +1,21 @@
+- name: Install DHCP server
+  apt:
+    name: isc-dhcp-server
+    state: latest
+    update_cache: yes
+- name: Setup DHCP IPv4
+  lineinfile:
+    dest: /etc/default/isc-dhcp-server
+    regexp: '^INTERFACESv4'
+    line: 'INTERFACESv4="{{ dhcp_interface }}"'
+    state: present
+    backup: yes
+- name: DHCP config file
+  template:
+    dest: /etc/dhcp/dhcpd.conf
+    src: isc-dhcp-server.j2
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart dhcp
