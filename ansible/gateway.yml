@@ -1,0 +1,27 @@
+- hosts: gateway
+  become: true
+  become_user: root
+  pre_tasks:
+  roles:
+    - role: hostname
+      vars:
+        hostname: gateway
+    - role: user
+      vars:
+        user_name: gateway
+        user_pwd: gateway
+    - role: networks
+      vars:
+        external_interface: enp0s3
+        intnet_interface: enp0s8
+        intnet_address: 192.168.0.1
+        intnet_prefix: 24
+    - role: dhcp
+      vars:
+        dhcp_interface: enp0s8
+        dhcp_default_lease_time: 60
+        dhcp_max_lease_time: 7200
+        dhcp_subnet: 192.168.0.0
+        dhcp_netmask: 255.255.255.0
+        dhcp_range_start: 192.168.0.100
+        dhcp_range_end: 192.168.0.105
