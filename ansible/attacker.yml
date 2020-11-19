@@ -1,0 +1,14 @@
+- name: Setup attacker
+  hosts: attacker
+  become: true
+  become_user: root
+  roles:
+    - role: hostname
+      vars:
+        hostname: attacker
+    - role: user
+      vars:
+        user_name: attacker
+        user_pwd: attacker
+    - role: miniconda
+    - role: dynoroot
