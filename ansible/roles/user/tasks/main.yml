@@ -1,0 +1,23 @@
+- name: New user
+  user:
+    name: "{{ user_name }}"
+    shell: /bin/bash
+    password: "{{ user_pwd | password_hash('sha512')}}"
+- name: Add user to sudoers
+  copy:
+    dest: "/etc/sudoers.d/{{ user_name }}"
+    content: "{{ user_name }}  ALL=(ALL)  NOPASSWD: ALL"
+- name: Deploy SSH key
+  authorized_key:
+    user: "{{ user_name }}"
+    key: "{{ lookup('file', user_ssh_key_pub) }}"
+    state: present
+- name: Disable root login
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+    backup: yes
+  notify:
+    - restart ssh
