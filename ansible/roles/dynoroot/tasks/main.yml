@@ -1,0 +1,25 @@
+- name: Check if conda environment exists
+  stat:
+    path: "{{ ansible_env.HOME }}/miniconda3/envs/dynoroot"
+  register: env_exists
+- name: Copy conda environment file
+  copy:
+    src: conda.yml
+    dest: "{{ ansible_env.HOME }}/conda.yml"
+  register: env_export
+- name: Delete old conda environment
+  shell: "{{ ansible_env.HOME }}/miniconda3/bin/conda env remove -n dynoroot"
+  when: env_exists.stat.exists and env_export.changed
+- name: Create conda environment
+  shell: "{{ ansible_env.HOME }}/miniconda3/bin/conda env create -f {{ ansible_env.HOME }}/conda.yml -n dynoroot"
+  when: not env_exists.stat.exists or env_export.changed
+- name: Git checkout Rogue DHCP
+  git:
+    repo: "https://github.com/baldassarreFe/CVE-2018-1111"
+    dest: "{{ ansible_env.HOME }}/CVE-2018-1111"
+    version: feature/ignore-mac
+- name: Git checkout DHCP starver
+  git:
+    repo: "https://github.com/baldassarreFe/FEP3370-advanced-ethical-hacking"
+    dest: "{{ ansible_env.HOME }}/FEP3370-advanced-ethical-hacking"
+    version: main

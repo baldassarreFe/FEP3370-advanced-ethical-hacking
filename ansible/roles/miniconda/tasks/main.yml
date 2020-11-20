@@ -1,0 +1,20 @@
+- name: Check if Miniconda is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/miniconda3/bin/conda"
+  register: stat_miniconda
+- name: Download Miniconda
+  get_url:
+    url: "https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    dest: /tmp/Miniconda3-latest-Linux-x86_64.sh
+    checksum: "sha256:879457af6a0bf5b34b48c12de31d4df0ee2f06a8e68768e5758c3293b2daf688"
+    mode: 0550
+  when: not stat_miniconda.stat.exists
+- name: Install Miniconda
+  shell: "/tmp/Miniconda3-latest-Linux-x86_64.sh -b -p {{ ansible_env.HOME }}/miniconda3"
+  when: not stat_miniconda.stat.exists
+- name: Cleanup
+  file:
+    state: absent
+    path: /tmp/Miniconda3-latest-Linux-x86_64.sh
+- name: Conda init
+  shell: "{{ ansible_env.HOME }}/miniconda3/bin/conda init"
