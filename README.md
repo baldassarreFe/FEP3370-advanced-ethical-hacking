@@ -9,10 +9,9 @@ machine.
 The vulnerability is credited to [Felix Wilhelm](https://twitter.com/_fel1x) and is known as
 [CVE-2018-1111](https://access.redhat.com/security/vulnerabilities/3442151) or "DynoRoot".
 
-<video style="position:relative; left:50%; transform:translateX(-50%); max-width:1000px;" width="90%" controls>
-  <source src="./media/dynoroot.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<a href="https://youtu.be/rgjMzQ5ExyA">
+  <img src="./media/dynoroot.gif" style="position:relative; left:50%; transform:translateX(-50%); max-width:1000px;" width="90%">
+</a>
 
 ### Table of contents:
 - [Introduction](#introduction)
@@ -1289,8 +1288,8 @@ nmcli
 ### Analysis
 
 #### Video capture
-The following video demonstrates the execution of the attack following the steps above.
-In the video, it is possible to observe:
+The following [video](./media/dynoroot.mp4) demonstrates the execution of the attack following the
+steps above. In the video, it is possible to observe:
 1. The 4-way DHCP exchange betweent the `gateway` and the `attacker`
 2. The DHCP starvation attack, both in the console of the attacker 
    and in the logs of the DHCP server (note the `NACK` due to the existing lease of the attacker)
@@ -1302,10 +1301,9 @@ In the video, it is possible to observe:
 7. The successful remote code execution of simple commands on the victim machine
 8. The DHCP `RELEASE` sent at the end of the attack
 
-<video style="position:relative; left:50%; transform:translateX(-50%); max-width:1400px;" width="90%" controls>
-  <source src="./media/dynoroot.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<a href="https://youtu.be/rgjMzQ5ExyA">
+  <img src="./media/dynoroot.gif" style="position:relative; left:50%; transform:translateX(-50%); max-width:1000px;" width="90%">
+</a>
 
 #### Traffic analysis
 
@@ -1316,6 +1314,7 @@ The [capture file](./media/attack.pcap) containing the trace of the attack can b
 3. The DPCH exchange initiated by the `victim` and completed by the `attacker`
 4. The ARP _who-has_ requests and replies when the `victim` connected to the netcat session 
    on the `attacker`
+
 <figure style="text-align:center">
   <img src="./media/wireshark.png" style="max-width:800px;" width="90%"/>
   <figcaption>Packet capture of the attack, the DHCP option related to the exploit is highlighted. The letters in the MAC addresses stand for: <code>d</code> DHCP server, <code>a</code> attacker, <code>f</code> Fedora victim</figcaption>
